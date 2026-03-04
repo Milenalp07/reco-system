@@ -1,5 +1,7 @@
+using api.Data;
 using api.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Controllers;
 
@@ -7,52 +9,28 @@ namespace api.Controllers;
 [Route("[controller]")]
 public class MoviesController : ControllerBase
 {
-    // Temporary in-memory list (later this will come from the database)
-    private static readonly List<Movie> Movies = new()
+    private readonly AppDbContext _db;
+
+    public MoviesController(AppDbContext db)
     {
-        new Movie
-        {
-            Id = 1,
-            Title = "Inception",
-            Genre = "Sci-Fi",
-            ReleaseYear = 2010,
-            Description = "A thief who steals corporate secrets through dream-sharing technology.",
-            Rating = 4.8
-        },
-        new Movie
-        {
-            Id = 2,
-            Title = "The Dark Knight",
-            Genre = "Action",
-            ReleaseYear = 2008,
-            Description = "Batman faces the Joker in Gotham City.",
-            Rating = 4.9
-        },
-        new Movie
-        {
-            Id = 3,
-            Title = "Interstellar",
-            Genre = "Sci-Fi",
-            ReleaseYear = 2014,
-            Description = "A team travels through a wormhole in space to save humanity.",
-            Rating = 4.7
-        }
-    };
+        _db = db;
+    }
 
     // GET /movies
     [HttpGet]
-    public ActionResult<IEnumerable<Movie>> GetAll()
+    public async Task<ActionResult<IEnumerable<Movie>>> GetAll()
     {
-        return Ok(Movies);
+        var movies = await _db.Movies.AsNoTracking().ToListAsync();
+        return Ok(movies);
     }
 
     // GET /movies/{id}
-    [HttpGet("{id}")]
-    public ActionResult<Movie> GetById(int id)
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<Movie>> GetById(int id)
     {
-        var movie = Movies.FirstOrDefault(m => m.Id == id);
+        var movie = await _db.Movies.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
 
-        if (movie == null)
+        if (movie is null)
             return NotFound();
 
         return Ok(movie);

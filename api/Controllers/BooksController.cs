@@ -1,5 +1,7 @@
+using api.Data;
 using api.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace api.Controllers;
 
@@ -7,52 +9,29 @@ namespace api.Controllers;
 [Route("[controller]")]
 public class BooksController : ControllerBase
 {
-    // Lista temporária de livros (mais tarde virá do banco)
-    private static readonly List<Book> Books = new()
+    private readonly AppDbContext _db;
+
+    public BooksController(AppDbContext db)
     {
-        new Book
-        {
-            Id = 1,
-            Title = "1984",
-            Author = "George Orwell",
-            Genre = "Dystopian",
-            YearPublished = 1949,
-            Description = "A dystopian novel about totalitarian regime."
-        },
-        new Book
-        {
-            Id = 2,
-            Title = "The Hobbit",
-            Author = "J.R.R. Tolkien",
-            Genre = "Fantasy",
-            YearPublished = 1937,
-            Description = "A hobbit goes on an unexpected adventure."
-        },
-        new Book
-        {
-            Id = 3,
-            Title = "To Kill a Mockingbird",
-            Author = "Harper Lee",
-            Genre = "Fiction",
-            YearPublished = 1960,
-            Description = "A story about racial injustice in the Deep South."
-        }
-    };
+        _db = db;
+    }
 
     // GET /books
     [HttpGet]
-    public ActionResult<IEnumerable<Book>> GetAll()
+    public async Task<ActionResult<IEnumerable<Book>>> GetAll()
     {
-        return Ok(Books);
+        var books = await _db.Books.AsNoTracking().ToListAsync();
+        return Ok(books);
     }
 
     // GET /books/{id}
-    [HttpGet("{id}")]
-    public ActionResult<Book> GetById(int id)
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<Book>> GetById(int id)
     {
-        var book = Books.FirstOrDefault(b => b.Id == id);
+        var book = await _db.Books.AsNoTracking()
+                                  .FirstOrDefaultAsync(b => b.Id == id);
 
-        if (book == null)
+        if (book is null)
             return NotFound();
 
         return Ok(book);
