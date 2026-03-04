@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Media Library</title>
+  <style>
+    .tabs { display: flex; margin-bottom: 10px; }
+    .tab { margin-right: 10px; cursor: pointer; }
+    .tab.active { font-weight: bold; }
+    .content { border-top: 1px solid #ccc; padding-top: 10px; }
+  </style>
+</head>
+<body>
+
+  <div class="tabs">
+    <div class="tab active" data-category="movies">Movies</div>
+    <div class="tab" data-category="books">Books</div>
+  </div>
+
+  <div class="content" id="content">
+    Loading...
+  </div>
+
+  <script>
+    const tabs = document.querySelectorAll('.tab');
+    const contentDiv = document.getElementById('content');
+
+    // Alterna entre abas
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        tabs.forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        loadCategory(tab.dataset.category);
+      });
+    });
+
+    // Função que busca os dados da API
+    async function loadCategory(category) {
+      contentDiv.innerHTML = 'Loading...';
+      try {
+        const res = await fetch(`http://localhost:8080/${category}`);
+        const data = await res.json();
+
+        if (!data || data.length === 0) {
+          contentDiv.innerHTML = 'No items found.';
+          return;
+        }
+
+        // Limpa conteúdo e adiciona itens
+        contentDiv.innerHTML = '';
+        data.forEach(item => {
+          const div = document.createElement('div');
+          if (category === 'movies') {
+            div.innerHTML = `<strong>${item.title}</strong> (${item.releaseYear}) - ${item.genre} - Rating: ${item.rating}`;
+          } else if (category === 'books') {
+            div.innerHTML = `<strong>${item.title}</strong> by ${item.author} (${item.yearPublished}) - ${item.genre}`;
+          }
+          contentDiv.appendChild(div);
+        });
+
+      } catch (err) {
+        contentDiv.innerHTML = 'Error loading data.';
+        console.error(err);
+      }
+    }
+
+    // Carrega Movies por padrão
+    loadCategory('movies');
+  </script>
+
+</body>
+</html>

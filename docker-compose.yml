@@ -16,9 +16,19 @@ services:
       - "6379:6379"
 
   api:
-    image: nginx:alpine
+    build: ./api
+    environment:
+      ASPNETCORE_URLS: http://+:8080
+      DB_HOST: postgres
+      DB_USER: app
+      DB_PASSWORD: apppass
+      DB_NAME: recommender
+      REDIS_HOST: redis
     ports:
-      - "8080:80"
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - redis
 
 volumes:
   pgdata:

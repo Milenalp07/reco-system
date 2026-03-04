@@ -1,28 +1,27 @@
 var builder = WebApplication.CreateBuilder(args);
 
-// Fixed URL for local development (optional but helpful)
-builder.WebHost.UseUrls("http://localhost:5177");
-
-// Add Controllers (MVC-style API)
 builder.Services.AddControllers();
-
-// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// ✅ CORS para permitir o frontend (Live Server) chamar a API
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod());
+});
+
 var app = builder.Build();
 
-// Middleware pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-// Disable HTTPS redirect for now (simplifies local + Docker)
-// app.UseHttpsRedirection();
+app.UseCors();      // ✅ importante: antes do MapControllers
 
-// Map Controllers
 app.MapControllers();
-
 app.Run();
