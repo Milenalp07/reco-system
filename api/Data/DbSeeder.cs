@@ -4,70 +4,35 @@ namespace api.Data;
 
 public static class DbSeeder
 {
-    public static void Seed(AppDbContext db)
+    public static void Seed(AppDbContext context)
     {
-        // Movies
-        if (!db.Movies.Any())
+        if (!context.Books.Any())
         {
-            db.Movies.AddRange(
-                new Movie
-                {
-                    Title = "Inception",
-                    Genre = "Sci-Fi",
-                    ReleaseYear = 2010,
-                    Description = "A thief who steals corporate secrets through dream-sharing technology.",
-                    Rating = 4.8
-                },
-                new Movie
-                {
-                    Title = "The Dark Knight",
-                    Genre = "Action",
-                    ReleaseYear = 2008,
-                    Description = "Batman faces the Joker in Gotham City.",
-                    Rating = 4.9
-                },
-                new Movie
-                {
-                    Title = "Interstellar",
-                    Genre = "Sci-Fi",
-                    ReleaseYear = 2014,
-                    Description = "A team travels through a wormhole in space to save humanity.",
-                    Rating = 4.7
-                }
-            );
-        }
-
-        // Books
-        if (!db.Books.Any())
-        {
-            db.Books.AddRange(
-                new Book
-                {
-                    Title = "1984",
-                    Author = "George Orwell",
-                    Genre = "Dystopian",
-                    YearPublished = 1949,
-                    Description = "A dystopian novel about totalitarian regime."
-                },
+            var books = new List<Book>
+            {
                 new Book
                 {
                     Title = "The Hobbit",
                     Author = "J.R.R. Tolkien",
                     Genre = "Fantasy",
                     YearPublished = 1937,
-                    Description = "A hobbit goes on an unexpected adventure."
+                    Description = "Adventure in Middle-earth",
+                    Rating = 4.8
                 },
                 new Book
                 {
-                    Title = "To Kill a Mockingbird",
-                    Author = "Harper Lee",
-                    Genre = "Fiction",
-                    YearPublished = 1960,
-                    Description = "A story about racial injustice in the Deep South."
+                    Title = "Harry Potter",
+                    Author = "J.K. Rowling",
+                    Genre = "Fantasy",
+                    YearPublished = 1997,
+                    Description = "Wizard story",
+                    Rating = 4.9
                 }
-            );
+            };
+
+            context.Books.AddRange(books);
         }
 
-        db.SaveChanges();
+        context.SaveChanges();
     }
 }

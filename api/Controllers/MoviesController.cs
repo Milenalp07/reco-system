@@ -1,38 +1,24 @@
-using api.Data;
-using api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using api.Data;
 
 namespace api.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class MoviesController : ControllerBase
 {
-    private readonly AppDbContext _db;
+    private readonly AppDbContext _context;
 
-    public MoviesController(AppDbContext db)
+    public MoviesController(AppDbContext context)
     {
-        _db = db;
+        _context = context;
     }
 
-    // GET /movies
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Movie>>> GetAll()
+    public async Task<IActionResult> GetMovies()
     {
-        var movies = await _db.Movies.AsNoTracking().ToListAsync();
+        var movies = await _context.Movies.ToListAsync();
         return Ok(movies);
-    }
-
-    // GET /movies/{id}
-    [HttpGet("{id:int}")]
-    public async Task<ActionResult<Movie>> GetById(int id)
-    {
-        var movie = await _db.Movies.AsNoTracking().FirstOrDefaultAsync(m => m.Id == id);
-
-        if (movie is null)
-            return NotFound();
-
-        return Ok(movie);
     }
 }

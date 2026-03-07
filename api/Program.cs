@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using api.Data;
+using api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,11 +8,14 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// ✅ EF Core + SQLite (arquivo reco.db dentro da pasta api)
+// EF Core + SQLite
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite("Data Source=reco.db"));
 
-// ✅ CORS para permitir o frontend (Live Server) chamar a API
+// Registrar o RecommendationService
+builder.Services.AddScoped<RecommendationService>();
+
+// CORS para permitir o frontend chamar a API
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
@@ -22,27 +26,13 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// Aplica migrations e seed
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     db.Database.Migrate();
     DbSeeder.Seed(db);
 }
-
-// ✅ Aplica migrations automaticamente ao iniciar (evita esquecer o database update)
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.Migrate();
-}
-
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.Migrate();
-    DbSeeder.Seed(db);
-}
-
 
 if (app.Environment.IsDevelopment())
 {
@@ -50,7 +40,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseCors(); // ✅ antes do MapControllers
+app.UseCors();
+
+app.MapGet("/", () => "Recommendation API is running");
 
 app.MapControllers();
+
 app.Run();
