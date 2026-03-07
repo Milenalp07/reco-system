@@ -1,73 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Media Library</title>
-  <style>
-    .tabs { display: flex; margin-bottom: 10px; }
-    .tab { margin-right: 10px; cursor: pointer; }
-    .tab.active { font-weight: bold; }
-    .content { border-top: 1px solid #ccc; padding-top: 10px; }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reco System</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="page-bg"></div>
 
-  <div class="tabs">
-    <div class="tab active" data-category="movies">Movies</div>
-    <div class="tab" data-category="books">Books</div>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="logo-box">
+        <div class="logo-icon">R</div>
+        <div>
+          <h2>Reco</h2>
+          <p>Entertainment Hub</p>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-type="all">Discover</button>
+        <button class="nav-item" data-type="books">Books</button>
+        <button class="nav-item" data-type="movies">Movies</button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <p>Desktop Experience</p>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div>
+          <p class="tiny-label">WELCOME BACK</p>
+          <h1>Find your next favorite</h1>
+        </div>
+
+        <div class="topbar-right">
+          <div class="search-wrapper">
+            <input
+              type="text"
+              id="searchInput"
+              placeholder="Search books, movies, genre..."
+            />
+          </div>
+        </div>
+      </header>
+
+      <section class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+          <span class="hero-tag">FEATURED COLLECTION</span>
+          <h2>Books and movies in one premium space</h2>
+          <p>
+            Explore your recommendation system in a desktop dark interface with
+            live search and category filters.
+          </p>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <div class="section-head">
+          <div>
+            <h2 id="sectionTitle">All Items</h2>
+            <p class="section-subtitle">Your library</p>
+          </div>
+          <span id="resultsCount" class="result-pill">0 items</span>
+        </div>
+
+        <div id="cardsContainer" class="cards-grid"></div>
+      </section>
+    </main>
   </div>
 
-  <div class="content" id="content">
-    Loading...
-  </div>
-
-  <script>
-    const tabs = document.querySelectorAll('.tab');
-    const contentDiv = document.getElementById('content');
-
-    // Alterna entre abas
-    tabs.forEach(tab => {
-      tab.addEventListener('click', () => {
-        tabs.forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        loadCategory(tab.dataset.category);
-      });
-    });
-
-    // Função que busca os dados da API
-    async function loadCategory(category) {
-      contentDiv.innerHTML = 'Loading...';
-      try {
-        const res = await fetch(`http://localhost:8080/${category}`);
-        const data = await res.json();
-
-        if (!data || data.length === 0) {
-          contentDiv.innerHTML = 'No items found.';
-          return;
-        }
-
-        // Limpa conteúdo e adiciona itens
-        contentDiv.innerHTML = '';
-        data.forEach(item => {
-          const div = document.createElement('div');
-          if (category === 'movies') {
-            div.innerHTML = `<strong>${item.title}</strong> (${item.releaseYear}) - ${item.genre} - Rating: ${item.rating}`;
-          } else if (category === 'books') {
-            div.innerHTML = `<strong>${item.title}</strong> by ${item.author} (${item.yearPublished}) - ${item.genre}`;
-          }
-          contentDiv.appendChild(div);
-        });
-
-      } catch (err) {
-        contentDiv.innerHTML = 'Error loading data.';
-        console.error(err);
-      }
-    }
-
-    // Carrega Movies por padrão
-    loadCategory('movies');
-  </script>
-
+  <script src="script.js"></script>
 </body>
 </html>
