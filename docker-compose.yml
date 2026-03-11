@@ -30,7 +30,7 @@ services:
       - postgres
       - redis
 
-prometheus:
+  prometheus:
     image: prom/prometheus:latest
     volumes:
       - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
