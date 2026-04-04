@@ -11,8 +11,8 @@ using reco_system.Data;
 namespace recosystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260404183046_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260404193616_AddBookImageUrl")]
+    partial class AddBookImageUrl
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

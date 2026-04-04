@@ -28,9 +28,9 @@ namespace reco_system.Controllers
             if (book == null) return NotFound();
 
             var related = await _db.Books
-                .Where(b => b.Id != id && (
-                    b.Genre == book.Genre ||
-                    Math.Abs(b.Rating - book.Rating) <= 1.0))
+                .Where(b => b.Id != id &&
+                           (b.Genre == book.Genre ||
+                            Math.Abs(b.Rating - book.Rating) <= 1.0))
                 .Take(4)
                 .ToListAsync();
 
@@ -39,16 +39,22 @@ namespace reco_system.Controllers
         }
 
         [Authorize(Roles = "Admin,User")]
-        public IActionResult Add() => View();
+        public IActionResult Add()
+        {
+            return View();
+        }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> Add(Book book)
         {
-            if (!ModelState.IsValid) return View(book);
+            if (!ModelState.IsValid)
+                return View(book);
+
             _db.Books.Add(book);
             await _db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
 
         [Authorize(Roles = "Admin")]
@@ -56,17 +62,21 @@ namespace reco_system.Controllers
         {
             var book = await _db.Books.FindAsync(id);
             if (book == null) return NotFound();
+
             return View(book);
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(Book book)
         {
-            if (!ModelState.IsValid) return View(book);
+            if (!ModelState.IsValid)
+                return View(book);
+
             _db.Books.Update(book);
             await _db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
 
         [Authorize(Roles = "Admin")]
@@ -74,9 +84,21 @@ namespace reco_system.Controllers
         {
             var book = await _db.Books.FindAsync(id);
             if (book == null) return NotFound();
+
+            return View(book);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var book = await _db.Books.FindAsync(id);
+            if (book == null) return NotFound();
+
             _db.Books.Remove(book);
             await _db.SaveChangesAsync();
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
     }
 }

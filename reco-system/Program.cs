@@ -30,6 +30,7 @@ builder.Services.ConfigureApplicationCookie(options =>
 });
 
 builder.Services.AddHttpClient<TmdbService>();
+builder.Services.AddHttpClient<GoogleBooksService>();
 
 builder.Services.AddCors(options =>
 {
@@ -39,29 +40,56 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Seed: cria roles e utilizadores padrão
+// Seed: cria banco, aplica migrations, cria roles/users e adiciona livros
 using (var scope = app.Services.CreateScope())
 {
-    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<AppUser>>();
+    var services = scope.ServiceProvider;
+
+    var db = services.GetRequiredService<ApplicationDbContext>();
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = services.GetRequiredService<UserManager<AppUser>>();
+
+    db.Database.Migrate();
 
     foreach (var role in new[] { "Admin", "User" })
+    {
         if (!await roleManager.RoleExistsAsync(role))
             await roleManager.CreateAsync(new IdentityRole(role));
+    }
 
     if (await userManager.FindByEmailAsync("admin@reco.com") == null)
     {
-        var admin = new AppUser { UserName = "admin@reco.com", Email = "admin@reco.com", FullName = "Administrador" };
-        await userManager.CreateAsync(admin, "admin123");
-        await userManager.AddToRoleAsync(admin, "Admin");
+        var admin = new AppUser
+        {
+            UserName = "admin@reco.com",
+            Email = "admin@reco.com",
+            FullName = "Administrador",
+            EmailConfirmed = true
+        };
+
+        var result = await userManager.CreateAsync(admin, "admin123");
+
+        if (result.Succeeded)
+            await userManager.AddToRoleAsync(admin, "Admin");
     }
 
     if (await userManager.FindByEmailAsync("user@reco.com") == null)
     {
-        var user = new AppUser { UserName = "user@reco.com", Email = "user@reco.com", FullName = "Utilizador" };
-        await userManager.CreateAsync(user, "user123");
-        await userManager.AddToRoleAsync(user, "User");
+        var user = new AppUser
+        {
+            UserName = "user@reco.com",
+            Email = "user@reco.com",
+            FullName = "Utilizador",
+            EmailConfirmed = true
+        };
+
+        var result = await userManager.CreateAsync(user, "user123");
+
+        if (result.Succeeded)
+            await userManager.AddToRoleAsync(user, "User");
     }
+
+    FakeData.Seed(db);
 }
 
 if (app.Environment.IsDevelopment())
@@ -82,4 +110,5 @@ app.MapControllerRoute(
     pattern: "{controller=Account}/{action=Login}/{id?}");
 
 app.MapControllers();
+
 app.Run();

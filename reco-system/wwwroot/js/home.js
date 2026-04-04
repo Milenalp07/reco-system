@@ -1,10 +1,20 @@
 const API_BASE = "/api";
 
-// 🔥 TMDB SEARCH
+// 🎬 TMDB SEARCH
 async function searchTmdb(query) {
     if (!query) return [];
 
-    const res = await fetch(`/api/tmdb/search?query=${query}`);
+    const res = await fetch(`/api/tmdb/search?query=${encodeURIComponent(query)}`);
+    if (!res.ok) return [];
+
+    return await res.json();
+}
+
+// 📚 GOOGLE BOOKS SEARCH
+async function searchGoogleBooks(query) {
+    if (!query) return [];
+
+    const res = await fetch(`/api/googlebooks/search?query=${encodeURIComponent(query)}`);
     if (!res.ok) return [];
 
     return await res.json();
@@ -23,7 +33,6 @@ document.addEventListener("DOMContentLoaded", () => {
     let activeFilter = "all";
     let allBooks = [];
 
-    // 🔥 CARREGA SÓ LIVROS (filmes agora vêm do TMDB)
     loadBooks();
 
     async function loadBooks() {
@@ -37,39 +46,49 @@ document.addEventListener("DOMContentLoaded", () => {
             allBooks = await response.json();
         } catch (error) {
             console.error("Error loading books:", error);
+            allBooks = [];
         }
     }
 
-    // 🔍 SEARCH PRINCIPAL
     async function applyFilters() {
         const term = (searchInput?.value || "").toLowerCase().trim();
 
-        // 👉 esconde tudo se não digitou nada
         if (!term) {
             searchResults.classList.add("hidden");
+            booksGrid.innerHTML = "";
+            moviesGrid.innerHTML = "";
             return;
         }
 
         searchResults.classList.remove("hidden");
 
-        // 📚 FILTRA LIVROS (LOCAL)
-        const filteredBooks = allBooks.filter(book => {
+        const localBooks = allBooks.filter(book => {
             const title = (book.title || "").toLowerCase();
             const author = (book.author || "").toLowerCase();
             const genre = (book.genre || "").toLowerCase();
 
-            return title.includes(term) ||
+            return (
+                title.includes(term) ||
                 author.includes(term) ||
-                genre.includes(term);
+                genre.includes(term)
+            );
         });
 
-        // 🎬 BUSCA FILMES NO TMDB
+        const externalBooks = await searchGoogleBooks(term);
         const filteredMovies = await searchTmdb(term);
+
+        const mergedBooks = [...localBooks, ...externalBooks];
+
+        const filteredBooks = mergedBooks.filter((book, index, self) =>
+            index === self.findIndex(b =>
+                (b.title || "").toLowerCase() === (book.title || "").toLowerCase() &&
+                (b.author || "").toLowerCase() === (book.author || "").toLowerCase()
+            )
+        );
 
         renderBooks(filteredBooks);
         renderMovies(filteredMovies);
 
-        // 🎯 FILTER BUTTONS
         if (activeFilter === "books") {
             booksSection.style.display = "block";
             moviesSection.style.display = "none";
@@ -82,7 +101,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // 📚 RENDER BOOKS
     function renderBooks(books) {
         booksGrid.innerHTML = "";
 
@@ -95,7 +113,10 @@ document.addEventListener("DOMContentLoaded", () => {
             booksGrid.innerHTML += `
                 <div class="media-card">
                     <div class="media-poster">
-                        <img src="${book.imageUrl || 'https://via.placeholder.com/300x450?text=No+Image'}" />
+                        <img 
+                            src="${book.imageUrl || 'https://via.placeholder.com/300x450?text=No+Image'}" 
+                            alt="${book.title || "Book"}"
+                        />
                         <div class="media-overlay">
                             <span class="rating-badge">${book.rating ?? "N/A"}</span>
                         </div>
@@ -107,7 +128,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // 🎬 RENDER MOVIES (TMDB)
     function renderMovies(movies) {
         moviesGrid.innerHTML = "";
 
@@ -118,30 +138,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
         movies.forEach(movie => {
             moviesGrid.innerHTML += `
-            <a href="/Movies/TmdbDetails/${movie.id}" class="movie-card block">
-                <img src="${movie.imageUrl || 'https://via.placeholder.com/600x400?text=No+Image'}" alt="${movie.title || "Movie"}" />
-                <div class="movie-card-overlay">
-                    <span class="rating-inline">${movie.rating ?? "N/A"}</span>
-                    <h3 class="movie-title-small">${movie.title || "Untitled"}</h3>
-                </div>
-            </a>
-        `;
+                <a href="/Movies/TmdbDetails/${movie.id}" class="movie-card block">
+                    <img 
+                        src="${movie.imageUrl || 'https://via.placeholder.com/600x400?text=No+Image'}" 
+                        alt="${movie.title || "Movie"}" 
+                    />
+                    <div class="movie-card-overlay">
+                        <span class="rating-inline">${movie.rating ?? "N/A"}</span>
+                        <h3 class="movie-title-small">${movie.title || "Untitled"}</h3>
+                    </div>
+                </a>
+            `;
         });
     }
 
-    // 🎯 FILTER BUTTONS
     filterButtons.forEach(button => {
         button.addEventListener("click", () => {
             filterButtons.forEach(btn => btn.classList.remove("active"));
             button.classList.add("active");
 
             activeFilter = button.dataset.filter;
-
             applyFilters();
         });
     });
 
-    // 🔍 INPUT EVENT
     if (searchInput) {
         searchInput.addEventListener("input", applyFilters);
     }

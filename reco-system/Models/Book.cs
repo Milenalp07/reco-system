@@ -14,7 +14,6 @@ namespace reco_system.Models
         [StringLength(100)]
         public string Author { get; set; } = string.Empty;
 
-        [Required]
         [StringLength(50)]
         public string Genre { get; set; } = string.Empty;
 
