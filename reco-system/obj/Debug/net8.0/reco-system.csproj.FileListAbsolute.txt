@@ -1,0 +1,11 @@
+C:\Users\milen\source\repos\reco-system\reco-system\obj\Debug\net8.0\reco-system.csproj.AssemblyReference.cache
+C:\Users\milen\source\repos\reco-system\reco-system\obj\Debug\net8.0\rpswa.dswa.cache.json
+C:\Users\milen\source\repos\reco-system\reco-system\obj\Debug\net8.0\reco-system.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\milen\source\repos\reco-system\reco-system\obj\Debug\net8.0\reco-system.AssemblyInfoInputs.cache
+C:\Users\milen\source\repos\reco-system\reco-system\obj\Debug\net8.0\reco-system.AssemblyInfo.cs
+C:\Users\milen\source\repos\reco-system\reco-system\obj\Debug\net8.0\reco-system.csproj.CoreCompileInputs.cache
+C:\Users\milen\source\repos\reco-system\reco-system\obj\Debug\net8.0\reco-system.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\milen\source\repos\reco-system\reco-system\obj\Debug\net8.0\reco-system.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\milen\source\repos\reco-system\reco-system\obj\Debug\net8.0\reco-system.RazorAssemblyInfo.cache
+C:\Users\milen\source\repos\reco-system\reco-system\obj\Debug\net8.0\reco-system.RazorAssemblyInfo.cs
+C:\Users\milen\source\repos\reco-system\reco-system\obj\Debug\net8.0\reco-system.sourcelink.json

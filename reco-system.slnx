@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="reco-system.Tests/reco-system.Tests.csproj" />
+  <Project Path="reco-system/reco-system.csproj" />
+</Solution>

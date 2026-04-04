@@ -1,0 +1,28 @@
+﻿@model IEnumerable<reco_system.Models.Book>
+
+@{
+    ViewData["Title"] = "Books";
+}
+
+<h1 class="page-title">Books</h1>
+
+<div class="card-grid">
+    @foreach (var book in Model)
+    {
+        <div class="media-card">
+            <img src="@book.ImageUrl" alt="@book.Title" class="media-image" />
+            <div class="media-body">
+                <h3>@book.Title</h3>
+                <p class="meta"><strong>Author:</strong> @book.Author</p>
+                <p class="meta"><strong>Genre:</strong> @book.Genre</p>
+                <p class="meta"><strong>Year:</strong> @book.YearPublished</p>
+                <p class="desc">@book.Description</p>
+                <span class="rating">⭐ @book.Rating</span>
+
+                <a asp-action="Details" asp-route-id="@book.Id" class="btn btn-sm btn-purple">
+                    View Details
+                </a>
+            </div>
+        </div>
+    }
+</div>
