@@ -11,12 +11,10 @@
 using System;
 using System.Reflection;
 
-[assembly: Microsoft.AspNetCore.Identity.UI.UIFrameworkAttribute("Bootstrap5")]
-[assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("aspnet-reco_system-e145d4c9-3494-4375-b6e1-14aee3c4c98d")]
 [assembly: System.Reflection.AssemblyCompanyAttribute("reco-system")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+08824ecf1c6eb8d7fd85daedfda1790c672c53af")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7b88319e40c6774398b37b0673ac064dfa7ea7c1")]
 [assembly: System.Reflection.AssemblyProductAttribute("reco-system")]
 [assembly: System.Reflection.AssemblyTitleAttribute("reco-system")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

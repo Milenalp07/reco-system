@@ -2,14 +2,47 @@
     ViewData["Title"] = "Home";
 }
 
-<div class="hero-section text-center">
-    <h1>Recommendation System</h1>
-    <p>Discover amazing books and movies in one place.</p>
+<section class="hero-gradient px-6 lg:px-8 py-20 lg:py-28 min-h-screen flex items-center">
+    <div class="max-w-7xl mx-auto text-center w-full">
+        <p class="text-[11px] uppercase tracking-[0.4em] text-white/40 mb-4">
+            Recommendation Platform
+        </p>
 
-    <div class="hero-buttons">
-        <a class="btn btn-purple" asp-controller="Books" asp-action="Index">Browse Books</a>
-        <a class="btn btn-outline-purple" asp-controller="Movies" asp-action="Index">Browse Movies</a>
+        <h1 class="font-headline text-5xl md:text-7xl lg:text-8xl font-black tracking-tight text-white leading-[0.95] mb-8">
+            Discover Books <br /> & Movies
+        </h1>
 
-  
+        <p class="max-w-2xl mx-auto text-white/50 text-base md:text-lg mb-10">
+            Search your collection, explore top-rated content, and find your next favorite book or movie in one place.
+        </p>
+
+        <div class="max-w-3xl mx-auto glass-panel rounded-full p-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-2 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)]">
+            <div class="flex items-center gap-2 pl-4">
+                <span class="material-symbols-outlined text-white/40">search</span>
+            </div>
+
+            <input id="searchInput"
+                   type="text"
+                   placeholder="Search books, movies, genres, authors..."
+                   class="bg-transparent border-none focus:ring-0 text-white text-lg w-full px-2 sm:px-4 placeholder:text-white/20" />
+
+            <div class="flex items-center justify-center gap-2 pr-2">
+                <button class="filter-btn active" data-filter="all" type="button">All</button>
+                <button class="filter-btn" data-filter="books" type="button">Books</button>
+                <button class="filter-btn" data-filter="movies" type="button">Movies</button>
+            </div>
+        </div>
+
+        <div id="searchResults" class="max-w-6xl mx-auto mt-10 hidden">
+            <div id="booksSection" class="mb-10">
+                <h2 class="text-left text-white text-2xl font-bold mb-4">Books</h2>
+                <div id="booksGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6"></div>
+            </div>
+
+            <div id="moviesSection">
+                <h2 class="text-left text-white text-2xl font-bold mb-4">Movies</h2>
+                <div id="moviesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            </div>
+        </div>
     </div>
-</div>
+</section>

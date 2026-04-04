@@ -1,32 +1,96 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - reco_system</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index">reco-system</a>
-                <div class="navbar-nav">
-                    <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
-                    <a class="nav-link" asp-controller="Books" asp-action="Index">Books</a>
-                    <a class="nav-link" asp-controller="Movies" asp-action="Index">Movies</a>
-                </div>
-            </div>
-        </nav>
-    </header>
+    <title>@ViewData["Title"] - Reco-System</title>
 
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@200;400;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+
+    <script>
+        tailwind.config = {
+        darkMode: "class",
+        theme: {
+        extend: {
+        colors: {
+        background: "#131313",
+        surface: "#1b1b1b",
+        surfaceSoft: "#222222",
+        card: "#1f1f1f",
+        textMain: "#e2e2e2",
+        textSoft: "#a1a1aa",
+        borderSoft: "rgba(255,255,255,0.08)"
+        },
+        fontFamily: {
+        headline: ["Manrope", "sans-serif"],
+        body: ["Inter", "sans-serif"]
+        }
+        }
+        }
+        }
+    </script>
+
+    <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
+</head>
+<body class="font-body bg-background text-textMain selection:bg-white selection:text-black">
+    <div class="fixed top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
+        <div class="ethereal-blob absolute top-[-10%] right-[-10%] w-[600px] h-[600px] bg-white opacity-5 rounded-full"></div>
+        <div class="ethereal-blob absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-white opacity-[0.03] rounded-full"></div>
     </div>
 
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <header class="fixed top-0 w-full z-50 h-20 border-b border-white/10 bg-[#131313]/70 backdrop-blur-xl">
+        <div class="max-w-7xl mx-auto h-full px-6 lg:px-8 flex items-center justify-between">
+            <a asp-controller="Home" asp-action="Index" class="text-2xl font-black tracking-widest font-headline text-white">
+                RECO-SYSTEM
+            </a>
+
+            <nav class="hidden md:flex items-center gap-8">
+                <a asp-controller="Home" asp-action="Index" class="text-sm uppercase tracking-widest text-white border-b border-white pb-1">
+                    Home
+                </a>
+                <a href="#top-books" class="text-sm uppercase tracking-widest text-white/60 hover:text-white transition">
+                    Books
+                </a>
+                <a href="#top-movies" class="text-sm uppercase tracking-widest text-white/60 hover:text-white transition">
+                    Movies
+                </a>
+                <a href="/swagger" target="_blank" class="text-sm uppercase tracking-widest text-white/60 hover:text-white transition">
+                    Swagger
+                </a>
+            </nav>
+
+            <div class="flex items-center gap-4">
+                <a href="/login" class="hidden sm:inline-block border border-white/20 px-5 py-2 rounded-full text-sm uppercase tracking-widest text-white hover:bg-white hover:text-black transition">
+                    Login
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="pt-20 min-h-screen">
+        @RenderBody()
+    </main>
+
+    <footer class="border-t border-white/5 bg-[#131313]">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex gap-6 text-[11px] uppercase tracking-widest text-white/40">
+                <a href="#" class="hover:text-white transition">Privacy Policy</a>
+                <a href="#" class="hover:text-white transition">Terms of Service</a>
+                <a href="/swagger" target="_blank" class="hover:text-white transition">API Documentation</a>
+            </div>
+
+            <p class="text-[11px] uppercase tracking-widest text-white/30">
+                © 2026 Reco-System
+            </p>
+        </div>
+    </footer>
+
+    <script src="~/js/home.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

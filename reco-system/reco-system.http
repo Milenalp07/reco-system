@@ -1,0 +1,6 @@
+@reco_system_HostAddress = http://localhost:5153
+
+GET {{reco_system_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
