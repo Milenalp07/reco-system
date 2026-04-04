@@ -1,24 +1,82 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using reco_system.Data;
+using reco_system.Models;
 
 namespace reco_system.Controllers
 {
+    [Authorize]
     public class BooksController : Controller
     {
-        public IActionResult Index()
+        private readonly ApplicationDbContext _db;
+
+        public BooksController(ApplicationDbContext db)
         {
-            var books = FakeData.Books;
+            _db = db;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var books = await _db.Books.ToListAsync();
             return View(books);
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var book = FakeData.Books.FirstOrDefault(b => b.Id == id);
+            var book = await _db.Books.FindAsync(id);
+            if (book == null) return NotFound();
 
-            if (book == null)
-                return NotFound();
+            var related = await _db.Books
+                .Where(b => b.Id != id && (
+                    b.Genre == book.Genre ||
+                    Math.Abs(b.Rating - book.Rating) <= 1.0))
+                .Take(4)
+                .ToListAsync();
 
+            ViewBag.Related = related;
             return View(book);
+        }
+
+        [Authorize(Roles = "Admin,User")]
+        public IActionResult Add() => View();
+
+        [HttpPost]
+        [Authorize(Roles = "Admin,User")]
+        public async Task<IActionResult> Add(Book book)
+        {
+            if (!ModelState.IsValid) return View(book);
+            _db.Books.Add(book);
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(int id)
+        {
+            var book = await _db.Books.FindAsync(id);
+            if (book == null) return NotFound();
+            return View(book);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Edit(Book book)
+        {
+            if (!ModelState.IsValid) return View(book);
+            _db.Books.Update(book);
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var book = await _db.Books.FindAsync(id);
+            if (book == null) return NotFound();
+            _db.Books.Remove(book);
+            await _db.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
     }
 }
