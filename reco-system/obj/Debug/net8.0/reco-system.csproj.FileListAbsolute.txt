@@ -7,7 +7,6 @@ C:\Users\milen\source\repos\project-reco\reco-system\obj\Debug\net8.0\reco-syste
 C:\Users\milen\source\repos\project-reco\reco-system\obj\Debug\net8.0\reco-system.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\milen\source\repos\project-reco\reco-system\obj\Debug\net8.0\reco-system.RazorAssemblyInfo.cache
 C:\Users\milen\source\repos\project-reco\reco-system\obj\Debug\net8.0\reco-system.RazorAssemblyInfo.cs
-C:\Users\milen\source\repos\project-reco\reco-system\obj\Debug\net8.0\reco-system.sourcelink.json
 C:\Users\milen\source\repos\project-reco\reco-system\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\milen\source\repos\project-reco\reco-system\bin\Debug\net8.0\appsettings.json
 C:\Users\milen\source\repos\project-reco\reco-system\bin\Debug\net8.0\reco-system.staticwebassets.runtime.json

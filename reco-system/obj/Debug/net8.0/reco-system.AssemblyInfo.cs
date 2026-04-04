@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("reco-system")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7b88319e40c6774398b37b0673ac064dfa7ea7c1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5028969b46b9f4777b473d0a7caddd0a7dc200dd")]
 [assembly: System.Reflection.AssemblyProductAttribute("reco-system")]
 [assembly: System.Reflection.AssemblyTitleAttribute("reco-system")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

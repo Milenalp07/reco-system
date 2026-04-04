@@ -1,19 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using reco_system.Data;
+using reco_system.Services;
 
 namespace reco_system.Controllers
 {
     public class MoviesController : Controller
     {
-        public IActionResult Index()
+        private readonly TmdbService _tmdbService;
+
+        public MoviesController(TmdbService tmdbService)
         {
-            var movies = FakeData.Movies;
-            return View(movies);
+            _tmdbService = tmdbService;
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> TmdbDetails(int id)
         {
-            var movie = FakeData.Movies.FirstOrDefault(m => m.Id == id);
+            var movie = await _tmdbService.GetMovieDetails(id);
 
             if (movie == null)
                 return NotFound();

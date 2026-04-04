@@ -1,0 +1,87 @@
+﻿@model reco_system.Services.TmdbMovieDetails
+
+@{
+    ViewData["Title"] = Model.Title;
+    var posterUrl = !string.IsNullOrEmpty(Model.Poster_Path)
+        ? $"https://image.tmdb.org/t/p/w500{Model.Poster_Path}"
+        : "https://via.placeholder.com/500x750?text=No+Image";
+
+    var backdropUrl = !string.IsNullOrEmpty(Model.Backdrop_Path)
+        ? $"https://image.tmdb.org/t/p/original{Model.Backdrop_Path}"
+        : posterUrl;
+
+    var genres = Model.Genres != null && Model.Genres.Any()
+        ? string.Join(", ", Model.Genres.Select(g => g.Name))
+        : "No genre";
+
+    var year = !string.IsNullOrEmpty(Model.Release_Date) && Model.Release_Date.Length >= 4
+        ? Model.Release_Date.Substring(0, 4)
+        : "N/A";
+}
+
+<section class="relative min-h-screen text-white">
+    <div class="absolute inset-0">
+        <img src="@backdropUrl" alt="@Model.Title" class="w-full h-full object-cover opacity-20" />
+        <div class="absolute inset-0 bg-black/80"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-[#131313] via-[#131313]/80 to-black/70"></div>
+    </div>
+
+    <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-8 py-16">
+        <a href="/" class="inline-flex items-center gap-2 text-white/70 hover:text-white mb-10 transition">
+            <span>←</span>
+            <span>Back to search</span>
+        </a>
+
+        <div class="grid grid-cols-1 lg:grid-cols-[340px_1fr] gap-10 items-start">
+            <div class="rounded-3xl overflow-hidden shadow-2xl bg-black/30">
+                <img src="@posterUrl" alt="@Model.Title" class="w-full h-auto object-cover" />
+            </div>
+
+            <div class="pt-2">
+                <p class="text-[11px] uppercase tracking-[0.35em] text-white/40 mb-4">
+                    TMDB Movie Details
+                </p>
+
+                <h1 class="font-headline text-4xl md:text-6xl font-black tracking-tight text-white mb-4">
+                    @Model.Title
+                </h1>
+
+                <div class="flex flex-wrap items-center gap-3 text-sm text-white/70 mb-6">
+                    <span class="px-3 py-1 rounded-full bg-white/10 border border-white/10">
+                        ⭐ @Model.Vote_Average.ToString("0.0")
+                    </span>
+                    <span class="px-3 py-1 rounded-full bg-white/10 border border-white/10">
+                        @year
+                    </span>
+                    <span class="px-3 py-1 rounded-full bg-white/10 border border-white/10">
+                        @(Model.Runtime > 0 ? $"{Model.Runtime} min" : "Runtime N/A")
+                    </span>
+                </div>
+
+                <p class="text-white/50 uppercase tracking-[0.2em] text-xs mb-2">
+                    Genres
+                </p>
+                <p class="text-white text-base mb-8">
+                    @genres
+                </p>
+
+                <p class="text-white/50 uppercase tracking-[0.2em] text-xs mb-2">
+                    Overview
+                </p>
+                <p class="text-white/80 text-base leading-8 max-w-3xl mb-10">
+                    @(string.IsNullOrWhiteSpace(Model.Overview) ? "No description available." : Model.Overview)
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button class="px-8 py-4 bg-white text-black font-headline text-xs font-black uppercase tracking-widest rounded-full hover:scale-105 transition">
+                        Add to Library
+                    </button>
+
+                    <a href="/" class="px-8 py-4 border border-white/20 text-white font-headline text-xs font-black uppercase tracking-widest rounded-full hover:bg-white/5 transition text-center">
+                        Back
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
