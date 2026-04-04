@@ -20,16 +20,16 @@ namespace reco_system.Controllers
             var movies = await _tmdbService.SearchMovies(query);
 
             var result = movies
-                .Where(m => !string.IsNullOrEmpty(m.Title))
-                .Select(m => new
-                {
-                    id = m.Id,
-                    title = m.Title,
-                    rating = m.Vote_Average,
-                    imageUrl = string.IsNullOrEmpty(m.Poster_Path)
-                        ? null
-                        : $"https://image.tmdb.org/t/p/w500{m.Poster_Path}"
-                });
+            .Where(m => !string.IsNullOrEmpty(m.Title))
+            .Select(m => new
+            {
+                id = m.Id, // 🔥 ESSA LINHA QUE FALTA
+                title = m.Title,
+                rating = m.Vote_Average,
+                imageUrl = string.IsNullOrEmpty(m.Poster_Path)
+                    ? null
+                    : $"https://image.tmdb.org/t/p/w500{m.Poster_Path}"
+            });
 
             return Ok(result);
         }

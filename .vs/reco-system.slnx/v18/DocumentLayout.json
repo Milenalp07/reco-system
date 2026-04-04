@@ -3,6 +3,14 @@
   "WorkspaceRootPath": "C:\\Users\\milen\\source\\repos\\project-reco\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{8D5F7984-B3C8-3DAD-3932-1C39E7A15FB7}|reco-system\\reco-system.csproj|c:\\users\\milen\\source\\repos\\project-reco\\reco-system\\services\\tmdbservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D5F7984-B3C8-3DAD-3932-1C39E7A15FB7}|reco-system\\reco-system.csproj|solutionrelative:reco-system\\services\\tmdbservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8D5F7984-B3C8-3DAD-3932-1C39E7A15FB7}|reco-system\\reco-system.csproj|c:\\users\\milen\\source\\repos\\project-reco\\reco-system\\controllers\\tmdbcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8D5F7984-B3C8-3DAD-3932-1C39E7A15FB7}|reco-system\\reco-system.csproj|solutionrelative:reco-system\\controllers\\tmdbcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{8D5F7984-B3C8-3DAD-3932-1C39E7A15FB7}|reco-system\\reco-system.csproj|c:\\users\\milen\\source\\repos\\project-reco\\reco-system\\views\\movies\\tmdbdetails.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{8D5F7984-B3C8-3DAD-3932-1C39E7A15FB7}|reco-system\\reco-system.csproj|solutionrelative:reco-system\\views\\movies\\tmdbdetails.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
@@ -11,16 +19,8 @@
       "RelativeMoniker": "D:0:0:{8D5F7984-B3C8-3DAD-3932-1C39E7A15FB7}|reco-system\\reco-system.csproj|solutionrelative:reco-system\\wwwroot\\js\\home.js||{14D17961-FE51-464D-9111-C4AF11D7D99A}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8D5F7984-B3C8-3DAD-3932-1C39E7A15FB7}|reco-system\\reco-system.csproj|c:\\users\\milen\\source\\repos\\project-reco\\reco-system\\controllers\\tmdbcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8D5F7984-B3C8-3DAD-3932-1C39E7A15FB7}|reco-system\\reco-system.csproj|solutionrelative:reco-system\\controllers\\tmdbcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{8D5F7984-B3C8-3DAD-3932-1C39E7A15FB7}|reco-system\\reco-system.csproj|c:\\users\\milen\\source\\repos\\project-reco\\reco-system\\controllers\\moviescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8D5F7984-B3C8-3DAD-3932-1C39E7A15FB7}|reco-system\\reco-system.csproj|solutionrelative:reco-system\\controllers\\moviescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8D5F7984-B3C8-3DAD-3932-1C39E7A15FB7}|reco-system\\reco-system.csproj|c:\\users\\milen\\source\\repos\\project-reco\\reco-system\\services\\tmdbservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8D5F7984-B3C8-3DAD-3932-1C39E7A15FB7}|reco-system\\reco-system.csproj|solutionrelative:reco-system\\services\\tmdbservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8D5F7984-B3C8-3DAD-3932-1C39E7A15FB7}|reco-system\\reco-system.csproj|c:\\users\\milen\\source\\repos\\project-reco\\reco-system\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -42,24 +42,24 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 6,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 2,
               "Title": "TmdbDetails.cshtml",
               "DocumentMoniker": "C:\\Users\\milen\\source\\repos\\project-reco\\reco-system\\Views\\Movies\\TmdbDetails.cshtml",
               "RelativeDocumentMoniker": "reco-system\\Views\\Movies\\TmdbDetails.cshtml",
               "ToolTip": "C:\\Users\\milen\\source\\repos\\project-reco\\reco-system\\Views\\Movies\\TmdbDetails.cshtml",
               "RelativeToolTip": "reco-system\\Views\\Movies\\TmdbDetails.cshtml",
-              "ViewState": "AgIAAAkAAAAAAAAAAAAAAFYAAAAKAAAAAAAAAA==",
+              "ViewState": "AgIAACQAAAAAAAAAAAAAAFYAAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2026-04-04T17:42:30.469Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "MoviesController.cs",
               "DocumentMoniker": "C:\\Users\\milen\\source\\repos\\project-reco\\reco-system\\Controllers\\MoviesController.cs",
               "RelativeDocumentMoniker": "reco-system\\Controllers\\MoviesController.cs",
@@ -67,8 +67,7 @@
               "RelativeToolTip": "reco-system\\Controllers\\MoviesController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABgAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-04T17:42:02.976Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-04T17:42:02.976Z"
             },
             {
               "$type": "Document",
@@ -80,12 +79,11 @@
               "RelativeToolTip": "reco-system\\Views\\Shared\\_Layout.cshtml",
               "ViewState": "AgIAAEsAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2026-04-04T17:25:15.497Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-04T17:25:15.497Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 3,
               "Title": "home.js",
               "DocumentMoniker": "C:\\Users\\milen\\source\\repos\\project-reco\\reco-system\\wwwroot\\js\\home.js",
               "RelativeDocumentMoniker": "reco-system\\wwwroot\\js\\home.js",
@@ -93,18 +91,17 @@
               "RelativeToolTip": "reco-system\\wwwroot\\js\\home.js",
               "ViewState": "AgIAAGQAAAAAAAAAAAAAAH4AAAAQAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001646|",
-              "WhenOpened": "2026-04-04T17:21:00.778Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-04T17:21:00.778Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "TmdbController.cs",
               "DocumentMoniker": "C:\\Users\\milen\\source\\repos\\project-reco\\reco-system\\Controllers\\TmdbController.cs",
               "RelativeDocumentMoniker": "reco-system\\Controllers\\TmdbController.cs",
               "ToolTip": "C:\\Users\\milen\\source\\repos\\project-reco\\reco-system\\Controllers\\TmdbController.cs",
               "RelativeToolTip": "reco-system\\Controllers\\TmdbController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAACQAAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAABgAAAANAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-04T17:20:41.207Z",
               "EditorCaption": ""
@@ -119,18 +116,17 @@
               "RelativeToolTip": "reco-system\\Program.cs",
               "ViewState": "AgIAAAMAAAAAAAAAAAAkwBQAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-04T17:20:13.228Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-04T17:20:13.228Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 0,
               "Title": "TmdbService.cs",
               "DocumentMoniker": "C:\\Users\\milen\\source\\repos\\project-reco\\reco-system\\Services\\TmdbService.cs",
               "RelativeDocumentMoniker": "reco-system\\Services\\TmdbService.cs",
               "ToolTip": "C:\\Users\\milen\\source\\repos\\project-reco\\reco-system\\Services\\TmdbService.cs",
               "RelativeToolTip": "reco-system\\Services\\TmdbService.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAsAAAAlAAAAAAAAAA==",
+              "ViewState": "AgIAAC8AAAAAAAAAAAAgwEQAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-04T17:19:40.861Z",
               "EditorCaption": ""
@@ -138,15 +134,14 @@
             {
               "$type": "Document",
               "DocumentIndex": 7,
-              "Title": "reco-system",
+              "Title": "reco-system.csproj",
               "DocumentMoniker": "C:\\Users\\milen\\source\\repos\\project-reco\\reco-system\\reco-system.csproj",
               "RelativeDocumentMoniker": "reco-system\\reco-system.csproj",
               "ToolTip": "C:\\Users\\milen\\source\\repos\\project-reco\\reco-system\\reco-system.csproj",
               "RelativeToolTip": "reco-system\\reco-system.csproj",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2026-04-04T17:19:07.184Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-04T17:19:07.184Z"
             }
           ]
         }
