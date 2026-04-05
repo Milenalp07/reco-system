@@ -38,6 +38,7 @@
     <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
 </head>
 <body class="font-body bg-background text-textMain selection:bg-white selection:text-black">
+
     <div class="fixed top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
         <div class="ethereal-blob absolute top-[-10%] right-[-10%] w-[600px] h-[600px] bg-white opacity-5 rounded-full"></div>
         <div class="ethereal-blob absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-white opacity-[0.03] rounded-full"></div>
@@ -65,9 +66,81 @@
             </nav>
 
             <div class="flex items-center gap-4">
-                <a href="/login" class="hidden sm:inline-block border border-white/20 px-5 py-2 rounded-full text-sm uppercase tracking-widest text-white hover:bg-white hover:text-black transition">
-                    Login
-                </a>
+                @if (User.Identity != null && User.Identity.IsAuthenticated)
+                {
+                    <div class="relative group">
+                        <button class="flex items-center gap-2 border border-white/20 px-4 py-2 rounded-full text-sm uppercase tracking-widest text-white hover:bg-white/10 transition">
+                            <span class="material-symbols-outlined text-base">account_circle</span>
+                            @User.Identity.Name?.Split('@')[0]
+                            <span class="material-symbols-outlined text-base">expand_more</span>
+                        </button>
+
+                        <div class="absolute right-0 mt-2 w-56 bg-[#1b1b1b] border border-white/10 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+                            <div class="px-4 py-3 border-b border-white/10">
+                                <p class="text-xs text-white/40 uppercase tracking-widest">Signed in as</p>
+                                <p class="text-sm text-white mt-1 truncate">@User.Identity.Name</p>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <span class="inline-block mt-1 text-[10px] uppercase tracking-widest bg-violet-600/30 text-violet-400 px-2 py-0.5 rounded-full">Admin</span>
+                                }
+                                else if (User.IsInRole("Premium"))
+                                {
+                                    <span class="inline-block mt-1 text-[10px] uppercase tracking-widest bg-yellow-600/30 text-yellow-400 px-2 py-0.5 rounded-full">Premium</span>
+                                }
+                                else
+                                {
+                                    <span class="inline-block mt-1 text-[10px] uppercase tracking-widest bg-white/10 text-white/50 px-2 py-0.5 rounded-full">Free</span>
+                                }
+                            </div>
+
+                            <a asp-controller="Account" asp-action="ManageProfiles" class="flex items-center gap-2 px-4 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5 transition">
+                                <span class="material-symbols-outlined text-base">manage_accounts</span>
+                                Manage Profiles
+                            </a>
+
+                            <a asp-controller="Account" asp-action="Settings" class="flex items-center gap-2 px-4 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5 transition">
+                                <span class="material-symbols-outlined text-base">settings</span>
+                                Settings
+                            </a>
+
+                            <a asp-controller="Account" asp-action="Subscription" class="flex items-center gap-2 px-4 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5 transition">
+                                <span class="material-symbols-outlined text-base">workspace_premium</span>
+                                Subscription
+                            </a>
+
+                            @if (User.IsInRole("Admin") || User.IsInRole("Premium"))
+                            {
+                                <a asp-controller="Books" asp-action="Add" class="flex items-center gap-2 px-4 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5 transition border-t border-white/10">
+                                    <span class="material-symbols-outlined text-base">menu_book</span>
+                                    Add Book
+                                </a>
+
+                                <a asp-controller="Movies" asp-action="Add" class="flex items-center gap-2 px-4 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5 transition">
+                                    <span class="material-symbols-outlined text-base">movie</span>
+                                    Add Movie
+                                </a>
+                            }
+
+                            <a asp-controller="Account" asp-action="Privacy" class="flex items-center gap-2 px-4 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5 transition border-t border-white/10">
+                                <span class="material-symbols-outlined text-base">policy</span>
+                                Privacy & Legal
+                            </a>
+
+                            <form asp-controller="Account" asp-action="Logout" method="post" class="border-t border-white/10">
+                                <button type="submit" class="w-full flex items-center gap-2 px-4 py-3 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 transition rounded-b-xl">
+                                    <span class="material-symbols-outlined text-base">logout</span>
+                                    Sign Out
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Login" class="hidden sm:inline-block border border-white/20 px-5 py-2 rounded-full text-sm uppercase tracking-widest text-white hover:bg-white hover:text-black transition">
+                        Login
+                    </a>
+                }
             </div>
         </div>
     </header>
@@ -79,11 +152,10 @@
     <footer class="border-t border-white/5 bg-[#131313]">
         <div class="max-w-7xl mx-auto px-6 lg:px-8 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
             <div class="flex gap-6 text-[11px] uppercase tracking-widest text-white/40">
-                <a href="#" class="hover:text-white transition">Privacy Policy</a>
-                <a href="#" class="hover:text-white transition">Terms of Service</a>
+                <a asp-controller="Account" asp-action="Privacy" class="hover:text-white transition">Privacy Policy</a>
+                <a asp-controller="Account" asp-action="Subscription" class="hover:text-white transition">Terms of Service</a>
                 <a href="/swagger" target="_blank" class="hover:text-white transition">API Documentation</a>
             </div>
-
             <p class="text-[11px] uppercase tracking-widest text-white/30">
                 © 2026 Reco-System
             </p>

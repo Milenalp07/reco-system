@@ -1,0 +1,35 @@
+﻿@{
+    ViewData["Title"] = "Manage Profiles";
+}
+
+<div class="max-w-3xl mx-auto px-6 py-16">
+    <h1 class="text-4xl font-black font-headline text-white mb-2">Manage Profiles</h1>
+    <p class="text-white/40 text-sm mb-10">Your account profile</p>
+
+    <div class="bg-white/[0.03] border border-white/10 rounded-2xl p-8 flex items-center gap-6">
+        @if (!string.IsNullOrEmpty(ViewBag.User?.AvatarUrl))
+        {
+            <img src="@ViewBag.User.AvatarUrl" class="w-20 h-20 rounded-full object-cover border-2 border-violet-500" />
+        }
+        else
+        {
+            <div class="w-20 h-20 rounded-full bg-violet-600/30 flex items-center justify-center text-3xl text-violet-400 font-bold border-2 border-violet-500/30">
+                @ViewBag.User?.FullName?.Substring(0, 1).ToUpper()
+            </div>
+        }
+
+        <div>
+            <h2 class="text-white text-xl font-bold">@ViewBag.User?.FullName</h2>
+            <p class="text-white/40 text-sm">@ViewBag.User?.Email</p>
+            <span class="inline-block mt-2 text-xs uppercase tracking-widest px-3 py-1 rounded-full @(ViewBag.User?.Plan == "Premium" ? "bg-violet-600/30 text-violet-400" : "bg-white/10 text-white/50")">
+                @ViewBag.User?.Plan
+            </span>
+        </div>
+
+        <div class="ml-auto">
+            <a asp-action="Settings" class="border border-white/20 px-5 py-2 rounded-xl text-white/60 hover:text-white hover:border-white/40 transition text-sm">
+                Edit Profile
+            </a>
+        </div>
+    </div>
+</div>

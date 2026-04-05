@@ -1,11 +1,13 @@
-﻿@model reco_system.Models.LoginViewModel
-@{ Layout = null; }
+﻿@model reco_system.Models.RegisterViewModel
+@{
+    Layout = null;
+}
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <title>Login – RecoSystem</title>
+    <title>Register – RecoSystem</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
@@ -16,41 +18,55 @@
         .btn-primary:hover { opacity: 0.85; }
     </style>
 </head>
-<body class="min-h-screen flex items-center justify-center px-4">
+<body class="min-h-screen flex items-center justify-center px-4 py-10">
     <div class="w-full max-w-md">
         <div class="text-center mb-10">
             <h1 class="font-headline text-6xl text-white tracking-wider">RECO</h1>
-            <p class="text-white/30 text-sm mt-1 tracking-widest uppercase">Recommendation System</p>
+            <p class="text-white/30 text-sm mt-1 tracking-widest uppercase">Create your account</p>
         </div>
 
         <div class="glass rounded-2xl p-8">
-            <h2 class="text-white text-xl font-semibold mb-6">Sign In</h2>
+            <h2 class="text-white text-xl font-semibold mb-6">Sign Up</h2>
 
-            <form asp-action="Login" method="post">
+            <form asp-action="Register" method="post">
                 <div asp-validation-summary="ModelOnly" class="text-red-400 text-sm mb-4 bg-red-900/20 rounded-lg p-3"></div>
 
                 <div class="mb-4">
+                    <label class="text-white/50 text-xs uppercase tracking-widest block mb-2">Full Name</label>
+                    <input asp-for="FullName" placeholder="John Doe"
+                           class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/20 focus:outline-none focus:border-violet-500 transition" />
+                    <span asp-validation-for="FullName" class="text-red-400 text-xs mt-1 block"></span>
+                </div>
+
+                <div class="mb-4">
                     <label class="text-white/50 text-xs uppercase tracking-widest block mb-2">Email</label>
-                    <input asp-for="Email" type="email" placeholder="email@example.com"
+                    <input asp-for="Email" type="email" placeholder="john@example.com"
                            class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/20 focus:outline-none focus:border-violet-500 transition" />
                     <span asp-validation-for="Email" class="text-red-400 text-xs mt-1 block"></span>
                 </div>
 
-                <div class="mb-6">
+                <div class="mb-4">
                     <label class="text-white/50 text-xs uppercase tracking-widest block mb-2">Password</label>
                     <input asp-for="Password" type="password" placeholder="••••••"
                            class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/20 focus:outline-none focus:border-violet-500 transition" />
                     <span asp-validation-for="Password" class="text-red-400 text-xs mt-1 block"></span>
                 </div>
 
+                <div class="mb-6">
+                    <label class="text-white/50 text-xs uppercase tracking-widest block mb-2">Confirm Password</label>
+                    <input asp-for="ConfirmPassword" type="password" placeholder="••••••"
+                           class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder:text-white/20 focus:outline-none focus:border-violet-500 transition" />
+                    <span asp-validation-for="ConfirmPassword" class="text-red-400 text-xs mt-1 block"></span>
+                </div>
+
                 <button type="submit" class="btn-primary w-full py-3 rounded-xl text-white font-semibold text-sm tracking-wide">
-                    Sign In
+                    Create Account
                 </button>
             </form>
 
             <p class="text-center text-white/30 text-sm mt-6">
-                Don't have an account?
-                <a asp-action="Register" class="text-violet-400 hover:text-violet-300 transition">Sign Up</a>
+                Already have an account?
+                <a asp-action="Login" class="text-violet-400 hover:text-violet-300 transition">Sign In</a>
             </p>
         </div>
     </div>

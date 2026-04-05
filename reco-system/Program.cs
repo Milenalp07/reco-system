@@ -40,18 +40,16 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-// Seed: cria banco, aplica migrations, cria roles/users e adiciona livros
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-
     var db = services.GetRequiredService<ApplicationDbContext>();
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
     var userManager = services.GetRequiredService<UserManager<AppUser>>();
 
     db.Database.Migrate();
 
-    foreach (var role in new[] { "Admin", "User" })
+    foreach (var role in new[] { "Admin", "User", "Premium" })
     {
         if (!await roleManager.RoleExistsAsync(role))
             await roleManager.CreateAsync(new IdentityRole(role));
@@ -63,12 +61,11 @@ using (var scope = app.Services.CreateScope())
         {
             UserName = "admin@reco.com",
             Email = "admin@reco.com",
-            FullName = "Administrador",
-            EmailConfirmed = true
+            FullName = "Administrator",
+            EmailConfirmed = true,
+            Plan = "Premium"
         };
-
         var result = await userManager.CreateAsync(admin, "admin123");
-
         if (result.Succeeded)
             await userManager.AddToRoleAsync(admin, "Admin");
     }
@@ -79,12 +76,11 @@ using (var scope = app.Services.CreateScope())
         {
             UserName = "user@reco.com",
             Email = "user@reco.com",
-            FullName = "Utilizador",
-            EmailConfirmed = true
+            FullName = "User",
+            EmailConfirmed = true,
+            Plan = "Free"
         };
-
         var result = await userManager.CreateAsync(user, "user123");
-
         if (result.Succeeded)
             await userManager.AddToRoleAsync(user, "User");
     }
@@ -110,5 +106,4 @@ app.MapControllerRoute(
     pattern: "{controller=Account}/{action=Login}/{id?}");
 
 app.MapControllers();
-
 app.Run();
