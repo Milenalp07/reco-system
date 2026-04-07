@@ -19,6 +19,7 @@ namespace reco_system.Controllers
         public async Task<IActionResult> Index()
         {
             var books = await _db.Books.ToListAsync();
+            ApplyBookImages(books);
             return View(books);
         }
 
@@ -27,12 +28,16 @@ namespace reco_system.Controllers
             var book = await _db.Books.FindAsync(id);
             if (book == null) return NotFound();
 
+            ApplyBookImage(book);
+
             var related = await _db.Books
                 .Where(b => b.Id != id &&
                            (b.Genre == book.Genre ||
                             Math.Abs(b.Rating - book.Rating) <= 1.0))
                 .Take(4)
                 .ToListAsync();
+
+            ApplyBookImages(related);
 
             ViewBag.Related = related;
             return View(book);
@@ -49,6 +54,11 @@ namespace reco_system.Controllers
         [Authorize(Roles = "Admin,User")]
         public async Task<IActionResult> Add(Book book)
         {
+            if (!string.IsNullOrWhiteSpace(book.Isbn) && string.IsNullOrWhiteSpace(book.ImageUrl))
+            {
+                book.ImageUrl = BuildOpenLibraryCoverUrl(book.Isbn);
+            }
+
             if (!ModelState.IsValid)
                 return View(book);
 
@@ -63,6 +73,7 @@ namespace reco_system.Controllers
             var book = await _db.Books.FindAsync(id);
             if (book == null) return NotFound();
 
+            ApplyBookImage(book);
             return View(book);
         }
 
@@ -71,6 +82,11 @@ namespace reco_system.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(Book book)
         {
+            if (!string.IsNullOrWhiteSpace(book.Isbn) && string.IsNullOrWhiteSpace(book.ImageUrl))
+            {
+                book.ImageUrl = BuildOpenLibraryCoverUrl(book.Isbn);
+            }
+
             if (!ModelState.IsValid)
                 return View(book);
 
@@ -85,6 +101,7 @@ namespace reco_system.Controllers
             var book = await _db.Books.FindAsync(id);
             if (book == null) return NotFound();
 
+            ApplyBookImage(book);
             return View(book);
         }
 
@@ -99,6 +116,35 @@ namespace reco_system.Controllers
             _db.Books.Remove(book);
             await _db.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+        private static void ApplyBookImages(IEnumerable<Book> books)
+        {
+            foreach (var book in books)
+            {
+                ApplyBookImage(book);
+            }
+        }
+
+        private static void ApplyBookImage(Book book)
+        {
+            if (book == null) return;
+
+            if (string.IsNullOrWhiteSpace(book.ImageUrl) && !string.IsNullOrWhiteSpace(book.Isbn))
+            {
+                book.ImageUrl = BuildOpenLibraryCoverUrl(book.Isbn);
+            }
+
+            if (string.IsNullOrWhiteSpace(book.ImageUrl))
+            {
+                book.ImageUrl = "https://via.placeholder.com/300x450?text=No+Image";
+            }
+        }
+
+        private static string BuildOpenLibraryCoverUrl(string isbn)
+        {
+            var cleanIsbn = isbn.Replace("-", "").Trim();
+            return $"https://covers.openlibrary.org/b/isbn/{cleanIsbn}-L.jpg";
         }
     }
 }

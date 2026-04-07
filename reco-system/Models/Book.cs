@@ -20,10 +20,13 @@ namespace reco_system.Models
         public int YearPublished { get; set; }
 
         [StringLength(500)]
-        public string? Description { get; set; }
+        public string Description { get; set; } = string.Empty;
 
         [Range(0, 5)]
         public double Rating { get; set; }
+
+        [StringLength(20)]
+        public string? Isbn { get; set; }
 
         public string? ImageUrl { get; set; }
     }
