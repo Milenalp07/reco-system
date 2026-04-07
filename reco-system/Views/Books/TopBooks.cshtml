@@ -1,0 +1,32 @@
+﻿@model IEnumerable<reco_system.Models.Book>
+
+@{
+    ViewData["Title"] = "Top Books";
+}
+
+<section class="min-h-screen bg-[#131313] text-white px-6 py-16">
+    <h1 class="text-4xl font-bold mb-10">Top Books</h1>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-6">
+        @foreach (var book in Model)
+        {
+            <a href="/Books/Details/@book.Id" class="block group">
+                <div class="bg-white/5 rounded-2xl border border-white/10 p-4 transition hover:bg-white/10 hover:scale-105">
+
+                    <h3 class="font-bold text-white text-lg">@book.Title</h3>
+
+                    <p class="text-white/50 text-sm mt-1">@book.Author</p>
+
+                    <p class="text-white/40 text-xs mt-1">
+                        @book.Genre (@book.YearPublished)
+                    </p>
+
+                    <p class="text-yellow-400 text-sm mt-3">
+                        ⭐ @book.Rating
+                    </p>
+
+                </div>
+            </a>
+        }
+    </div>
+</section>
