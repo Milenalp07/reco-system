@@ -7,11 +7,14 @@
 
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 
+    <!-- FONTS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@200;400;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@200;400;700;800&family=Cinzel:wght@400;600;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
 
+    <!-- TAILWIND CONFIG -->
     <script>
         tailwind.config = {
         darkMode: "class",
@@ -28,7 +31,9 @@
         },
         fontFamily: {
         headline: ["Manrope", "sans-serif"],
-        body: ["Inter", "sans-serif"]
+        body: ["Inter", "sans-serif"],
+        logoSerif: ["Cormorant Garamond", "serif"],
+        logoCinema: ["Cinzel", "serif"]
         }
         }
         }
@@ -37,19 +42,38 @@
 
     <link rel="stylesheet" href="~/css/home.css" asp-append-version="true" />
 </head>
+
 <body class="font-body bg-background text-textMain selection:bg-white selection:text-black">
 
+    <!-- BACKGROUND BLOBS -->
     <div class="fixed top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
-        <div class="ethereal-blob absolute top-[-10%] right-[-10%] w-[600px] h-[600px] bg-white opacity-5 rounded-full"></div>
-        <div class="ethereal-blob absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-white opacity-[0.03] rounded-full"></div>
+        <div class="absolute top-[-10%] right-[-10%] w-[600px] h-[600px] bg-white opacity-5 rounded-full"></div>
+        <div class="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-white opacity-[0.03] rounded-full"></div>
     </div>
 
+    <!-- HEADER -->
     <header class="fixed top-0 w-full z-50 h-20 border-b border-white/10 bg-[#131313]/70 backdrop-blur-xl">
         <div class="max-w-7xl mx-auto h-full px-6 lg:px-8 flex items-center justify-between">
-            <a asp-controller="Home" asp-action="Index" class="text-2xl font-black tracking-widest font-headline text-white">
-                RECO-SYSTEM
+
+            <!-- 🔥 LOGO NOVO -->
+            <a asp-controller="Home" asp-action="Index" class="group flex flex-col leading-none select-none">
+                
+                <span class="text-[10px] uppercase tracking-[0.5em] text-white/35 font-body ml-1">
+                    books • movies
+                </span>
+
+                <span class="flex items-end gap-1">
+                    <span class="font-logoSerif text-3xl md:text-4xl font-semibold italic text-violet-300 group-hover:text-violet-200 transition drop-shadow-[0_0_12px_rgba(167,139,250,0.35)]">
+                        Reco
+                    </span>
+
+                    <span class="font-logoCinema text-3xl md:text-4xl font-bold uppercase tracking-[0.2em] text-white group-hover:text-white/90 transition">
+                        System
+                    </span>
+                </span>
             </a>
 
+            <!-- NAV -->
             <nav class="hidden md:flex items-center gap-8">
                 <a asp-controller="Home" asp-action="Index" class="text-sm uppercase tracking-widest text-white border-b border-white pb-1">
                     Home
@@ -59,6 +83,7 @@
                 </a>
             </nav>
 
+            <!-- USER MENU -->
             <div class="flex items-center gap-4">
                 @if (User.Identity != null && User.Identity.IsAuthenticated)
                 {
@@ -70,20 +95,22 @@
                         </button>
 
                         <div class="absolute right-0 mt-2 w-56 bg-[#1b1b1b] border border-white/10 rounded-xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+
                             <div class="px-4 py-3 border-b border-white/10">
                                 <p class="text-xs text-white/40 uppercase tracking-widest">Signed in as</p>
                                 <p class="text-sm text-white mt-1 truncate">@User.Identity.Name</p>
+
                                 @if (User.IsInRole("Admin"))
                                 {
-                                    <span class="inline-block mt-1 text-[10px] uppercase tracking-widest bg-violet-600/30 text-violet-400 px-2 py-0.5 rounded-full">Admin</span>
+                                    <span class="inline-block mt-1 text-[10px] bg-violet-600/30 text-violet-400 px-2 py-0.5 rounded-full">Admin</span>
                                 }
                                 else if (User.IsInRole("Premium"))
                                 {
-                                    <span class="inline-block mt-1 text-[10px] uppercase tracking-widest bg-yellow-600/30 text-yellow-400 px-2 py-0.5 rounded-full">Premium</span>
+                                    <span class="inline-block mt-1 text-[10px] bg-yellow-600/30 text-yellow-400 px-2 py-0.5 rounded-full">Premium</span>
                                 }
                                 else
                                 {
-                                    <span class="inline-block mt-1 text-[10px] uppercase tracking-widest bg-white/10 text-white/50 px-2 py-0.5 rounded-full">Free</span>
+                                    <span class="inline-block mt-1 text-[10px] bg-white/10 text-white/50 px-2 py-0.5 rounded-full">Free</span>
                                 }
                             </div>
 
@@ -97,31 +124,8 @@
                                 Settings
                             </a>
 
-                            <a asp-controller="Account" asp-action="Subscription" class="flex items-center gap-2 px-4 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5 transition">
-                                <span class="material-symbols-outlined text-base">workspace_premium</span>
-                                Subscription
-                            </a>
-
-                            @if (User.IsInRole("Admin") || User.IsInRole("Premium"))
-                            {
-                                <a asp-controller="Books" asp-action="Add" class="flex items-center gap-2 px-4 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5 transition border-t border-white/10">
-                                    <span class="material-symbols-outlined text-base">menu_book</span>
-                                    Add Book
-                                </a>
-
-                                <a asp-controller="Movies" asp-action="Add" class="flex items-center gap-2 px-4 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5 transition">
-                                    <span class="material-symbols-outlined text-base">movie</span>
-                                    Add Movie
-                                </a>
-                            }
-
-                            <a asp-controller="Account" asp-action="Privacy" class="flex items-center gap-2 px-4 py-3 text-sm text-white/70 hover:text-white hover:bg-white/5 transition border-t border-white/10">
-                                <span class="material-symbols-outlined text-base">policy</span>
-                                Privacy & Legal
-                            </a>
-
                             <form asp-controller="Account" asp-action="Logout" method="post" class="border-t border-white/10">
-                                <button type="submit" class="w-full flex items-center gap-2 px-4 py-3 text-sm text-red-400 hover:text-red-300 hover:bg-red-500/10 transition rounded-b-xl">
+                                <button type="submit" class="w-full flex items-center gap-2 px-4 py-3 text-sm text-red-400 hover:bg-red-500/10 transition rounded-b-xl">
                                     <span class="material-symbols-outlined text-base">logout</span>
                                     Sign Out
                                 </button>
@@ -139,16 +143,18 @@
         </div>
     </header>
 
+    <!-- MAIN -->
     <main class="pt-20 min-h-screen">
         @RenderBody()
     </main>
 
+    <!-- FOOTER -->
     <footer class="border-t border-white/5 bg-[#131313]">
         <div class="max-w-7xl mx-auto px-6 lg:px-8 py-10 flex flex-col md:flex-row items-center justify-between gap-4">
             <div class="flex gap-6 text-[11px] uppercase tracking-widest text-white/40">
-                <a asp-controller="Account" asp-action="Privacy" class="hover:text-white transition">Privacy Policy</a>
-                <a asp-controller="Account" asp-action="Subscription" class="hover:text-white transition">Terms of Service</a>
-                <a href="/swagger" target="_blank" class="hover:text-white transition">API Documentation</a>
+                <a asp-controller="Account" asp-action="Privacy" class="hover:text-white transition">Privacy</a>
+                <a asp-controller="Account" asp-action="Subscription" class="hover:text-white transition">Terms</a>
+                <a href="/swagger" target="_blank" class="hover:text-white transition">API</a>
             </div>
             <p class="text-[11px] uppercase tracking-widest text-white/30">
                 © 2026 Reco-System
@@ -158,5 +164,6 @@
 
     <script src="~/js/home.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>
