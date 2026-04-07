@@ -32,9 +32,13 @@ namespace reco_system.Controllers
 
             var related = await _db.Books
                 .Where(b => b.Id != id &&
-                           (b.Genre == book.Genre ||
-                            Math.Abs(b.Rating - book.Rating) <= 1.0))
-                .Take(4)
+                    (
+                        b.Genre == book.Genre ||
+                        b.Author == book.Author ||
+                        Math.Abs(b.Rating - book.Rating) <= 0.5
+                    ))
+                .OrderByDescending(b => b.Rating)
+                .Take(6)
                 .ToListAsync();
 
             ApplyBookImages(related);

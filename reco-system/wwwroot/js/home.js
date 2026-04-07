@@ -153,8 +153,10 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        booksGrid.innerHTML = books.map(book => `
-            <div class="media-card">
+        booksGrid.innerHTML = books.map(book => {
+            const isLocalBook = Number.isInteger(book.id);
+
+            const content = `
                 <div class="media-poster">
                     <img 
                         src="${book.imageUrl || 'https://via.placeholder.com/300x450?text=No+Image'}" 
@@ -166,8 +168,12 @@ document.addEventListener("DOMContentLoaded", () => {
                 </div>
                 <h3 class="media-title">${book.title || "Untitled"}</h3>
                 <p class="media-subtitle">${book.author || "Unknown Author"}</p>
-            </div>
-        `).join("");
+            `;
+
+            return isLocalBook
+                ? `<a href="/Books/Details/${book.id}" class="media-card block">${content}</a>`
+                : `<div class="media-card">${content}</div>`;
+        }).join("");
     }
 
     function renderMovies(movies) {

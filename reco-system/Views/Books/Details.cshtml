@@ -1,11 +1,85 @@
 ﻿@model reco_system.Models.Book
+@{
+    ViewData["Title"] = Model.Title;
+    var related = ViewBag.Related as List<reco_system.Models.Book> ?? new List<reco_system.Models.Book>();
+}
 
-<h1>@Model.Title</h1>
+<div class="min-h-screen bg-[#131313] text-white">
+    <div class="max-w-7xl mx-auto px-6 lg:px-12 py-10">
+        <a href="/" class="inline-flex items-center gap-2 text-white/60 hover:text-white transition mb-8">
+            <span class="material-symbols-outlined">arrow_back</span>
+            Back
+        </a>
 
-<img src="@Model.ImageUrl" style="width:300px; border-radius:10px;" />
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-10 items-start">
+            <div class="lg:col-span-1">
+                <div class="rounded-3xl overflow-hidden bg-white/5 border border-white/10 shadow-2xl">
+                    <img src="@Model.ImageUrl"
+                         alt="@Model.Title"
+                         class="w-full h-auto object-cover" />
+                </div>
+            </div>
 
-<p><strong>Genre:</strong> @Model.Genre</p>
-<p><strong>Description:</strong> @Model.Description</p>
-<p><strong>Rating:</strong> ⭐ @Model.Rating</p>
+            <div class="lg:col-span-2">
+                <div class="flex flex-wrap items-center gap-3 mb-4">
+                    <span class="text-[11px] uppercase tracking-[0.25em] text-white/50 border border-white/20 px-3 py-1 rounded-full">
+                        @Model.Genre
+                    </span>
+                    <span class="text-[11px] uppercase tracking-[0.25em] text-white/40">
+                        @Model.YearPublished
+                    </span>
+                    <span class="inline-flex items-center gap-1 bg-white/10 border border-white/10 px-4 py-2 rounded-full text-sm font-semibold">
+                        <span class="material-symbols-outlined text-yellow-400 text-base">star</span>
+                        @Model.Rating
+                    </span>
+                </div>
 
-<a asp-action="Index">Back</a>
+                <h1 class="text-4xl lg:text-6xl font-black leading-tight mb-3">
+                    @Model.Title
+                </h1>
+
+                <p class="text-xl text-white/70 mb-6">
+                    by @Model.Author
+                </p>
+
+                <div class="bg-white/5 border border-white/10 rounded-3xl p-6 lg:p-8">
+                    <h2 class="text-xl font-bold mb-4">Description</h2>
+                    <p class="text-white/65 leading-8 text-base">
+                        @(string.IsNullOrWhiteSpace(Model.Description) ? "No description available for this book." : Model.Description)
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-16">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl lg:text-3xl font-bold">Recommended Books</h2>
+            </div>
+
+            @if (related.Any())
+            {
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+                    @foreach (var book in related)
+                    {
+                        <a href="/Books/Details/@book.Id" class="media-card block">
+                            <div class="media-poster">
+                                <img src="@book.ImageUrl" alt="@book.Title" />
+                                <div class="media-overlay">
+                                    <span class="rating-badge">@book.Rating</span>
+                                </div>
+                            </div>
+                            <h3 class="media-title">@book.Title</h3>
+                            <p class="media-subtitle">@book.Author</p>
+                        </a>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="bg-white/5 border border-white/10 rounded-3xl p-6 text-white/50">
+                    No recommendations found.
+                </div>
+            }
+        </div>
+    </div>
+</div>
