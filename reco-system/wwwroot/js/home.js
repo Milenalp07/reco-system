@@ -4,20 +4,28 @@ const API_BASE = "/api";
 async function searchTmdb(query) {
     if (!query) return [];
 
-    const res = await fetch(`/api/tmdb/search?query=${encodeURIComponent(query)}`);
-    if (!res.ok) return [];
-
-    return await res.json();
+    try {
+        const res = await fetch(`/api/tmdb/search?query=${encodeURIComponent(query)}`);
+        if (!res.ok) return [];
+        return await res.json();
+    } catch (error) {
+        console.error("TMDB search error:", error);
+        return [];
+    }
 }
 
 // 📚 GOOGLE BOOKS SEARCH
 async function searchGoogleBooks(query) {
     if (!query) return [];
 
-    const res = await fetch(`/api/googlebooks/search?query=${encodeURIComponent(query)}`);
-    if (!res.ok) return [];
-
-    return await res.json();
+    try {
+        const res = await fetch(`/api/googlebooks/search?query=${encodeURIComponent(query)}`);
+        if (!res.ok) return [];
+        return await res.json();
+    } catch (error) {
+        console.error("Google Books search error:", error);
+        return [];
+    }
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -30,8 +38,14 @@ document.addEventListener("DOMContentLoaded", () => {
     const moviesSection = document.getElementById("moviesSection");
     const searchResults = document.getElementById("searchResults");
 
+    if (!searchInput || !booksGrid || !moviesGrid || !booksSection || !moviesSection || !searchResults) {
+        console.warn("Search elements not found in the page.");
+        return;
+    }
+
     let activeFilter = "all";
     let allBooks = [];
+    let debounceTimer;
 
     loadBooks();
 
@@ -50,32 +64,50 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    function hideSearchResults() {
+        searchResults.classList.add("hidden");
+        booksGrid.innerHTML = "";
+        moviesGrid.innerHTML = "";
+    }
+
+    function showSearchResults() {
+        searchResults.classList.remove("hidden");
+    }
+
     async function applyFilters() {
-        const term = (searchInput?.value || "").toLowerCase().trim();
+        const term = (searchInput.value || "").toLowerCase().trim();
 
         if (!term) {
-            searchResults.classList.add("hidden");
-            booksGrid.innerHTML = "";
-            moviesGrid.innerHTML = "";
+            hideSearchResults();
             return;
         }
 
-        searchResults.classList.remove("hidden");
+        showSearchResults();
 
         const localBooks = allBooks.filter(book => {
             const title = (book.title || "").toLowerCase();
             const author = (book.author || "").toLowerCase();
             const genre = (book.genre || "").toLowerCase();
+            const year = String(book.yearPublished || book.year || "").toLowerCase();
 
             return (
                 title.includes(term) ||
                 author.includes(term) ||
-                genre.includes(term)
+                genre.includes(term) ||
+                year.includes(term)
             );
         });
 
-        const externalBooks = await searchGoogleBooks(term);
-        const filteredMovies = await searchTmdb(term);
+        let externalBooks = [];
+        let filteredMovies = [];
+
+        if (activeFilter === "all" || activeFilter === "books") {
+            externalBooks = await searchGoogleBooks(term);
+        }
+
+        if (activeFilter === "all" || activeFilter === "movies") {
+            filteredMovies = await searchTmdb(term);
+        }
 
         const mergedBooks = [...localBooks, ...externalBooks];
 
@@ -88,14 +120,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
         renderBooks(filteredBooks);
         renderMovies(filteredMovies);
+        updateSectionsVisibility(filteredBooks, filteredMovies);
+    }
 
+    function updateSectionsVisibility(books, movies) {
         if (activeFilter === "books") {
             booksSection.style.display = "block";
             moviesSection.style.display = "none";
-        } else if (activeFilter === "movies") {
+            return;
+        }
+
+        if (activeFilter === "movies") {
             booksSection.style.display = "none";
             moviesSection.style.display = "block";
-        } else {
+            return;
+        }
+
+        booksSection.style.display = books.length ? "block" : "none";
+        moviesSection.style.display = movies.length ? "block" : "none";
+
+        if (!books.length && !movies.length) {
             booksSection.style.display = "block";
             moviesSection.style.display = "block";
         }
@@ -109,23 +153,21 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        books.forEach(book => {
-            booksGrid.innerHTML += `
-                <div class="media-card">
-                    <div class="media-poster">
-                        <img 
-                            src="${book.imageUrl || 'https://via.placeholder.com/300x450?text=No+Image'}" 
-                            alt="${book.title || "Book"}"
-                        />
-                        <div class="media-overlay">
-                            <span class="rating-badge">${book.rating ?? "N/A"}</span>
-                        </div>
+        booksGrid.innerHTML = books.map(book => `
+            <div class="media-card">
+                <div class="media-poster">
+                    <img 
+                        src="${book.imageUrl || 'https://via.placeholder.com/300x450?text=No+Image'}" 
+                        alt="${book.title || "Book"}"
+                    />
+                    <div class="media-overlay">
+                        <span class="rating-badge">${book.rating ?? "N/A"}</span>
                     </div>
-                    <h3 class="media-title">${book.title || "Untitled"}</h3>
-                    <p class="media-subtitle">${book.author || "Unknown Author"}</p>
                 </div>
-            `;
-        });
+                <h3 class="media-title">${book.title || "Untitled"}</h3>
+                <p class="media-subtitle">${book.author || "Unknown Author"}</p>
+            </div>
+        `).join("");
     }
 
     function renderMovies(movies) {
@@ -136,20 +178,18 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
-        movies.forEach(movie => {
-            moviesGrid.innerHTML += `
-                <a href="/Movies/TmdbDetails/${movie.id}" class="movie-card block">
-                    <img 
-                        src="${movie.imageUrl || 'https://via.placeholder.com/600x400?text=No+Image'}" 
-                        alt="${movie.title || "Movie"}" 
-                    />
-                    <div class="movie-card-overlay">
-                        <span class="rating-inline">${movie.rating ?? "N/A"}</span>
-                        <h3 class="movie-title-small">${movie.title || "Untitled"}</h3>
-                    </div>
-                </a>
-            `;
-        });
+        moviesGrid.innerHTML = movies.map(movie => `
+            <a href="/Movies/TmdbDetails/${movie.id}" class="movie-card block">
+                <img 
+                    src="${movie.imageUrl || 'https://via.placeholder.com/600x400?text=No+Image'}" 
+                    alt="${movie.title || "Movie"}" 
+                />
+                <div class="movie-card-overlay">
+                    <span class="rating-inline">${movie.rating ?? "N/A"}</span>
+                    <h3 class="movie-title-small">${movie.title || "Untitled"}</h3>
+                </div>
+            </a>
+        `).join("");
     }
 
     filterButtons.forEach(button => {
@@ -162,7 +202,21 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    if (searchInput) {
-        searchInput.addEventListener("input", applyFilters);
-    }
+    searchInput.addEventListener("input", () => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            applyFilters();
+        }, 250);
+    });
+
+    document.addEventListener("click", (e) => {
+        const clickedInsideSearch =
+            e.target.closest("#searchInput") ||
+            e.target.closest("#searchResults") ||
+            e.target.closest(".filter-btn");
+
+        if (!clickedInsideSearch) {
+            hideSearchResults();
+        }
+    });
 });

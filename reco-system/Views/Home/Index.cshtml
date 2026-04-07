@@ -3,88 +3,99 @@
     var featured = ViewBag.Featured as List<reco_system.Services.TmdbMovieDetails> ?? new List<reco_system.Services.TmdbMovieDetails>();
 }
 
-<!-- HERO CAROUSEL -->
 @if (featured.Any())
 {
-    <div class="relative w-full h-screen overflow-hidden" id="carousel">
+    <div class="relative w-full h-screen" id="carousel">
 
-        @for (int i = 0; i < featured.Count; i++)
-        {
-            var movie = featured[i];
-            var backdrop = string.IsNullOrEmpty(movie.Backdrop_Path)
-                ? (string.IsNullOrEmpty(movie.Poster_Path) ? "" : $"https://image.tmdb.org/t/p/original{movie.Poster_Path}")
-                : $"https://image.tmdb.org/t/p/original{movie.Backdrop_Path}";
-            var genres = movie.Genres?.Select(g => g.Name).Take(2).ToList() ?? new List<string?>();
+        <!-- Slides -->
+        <div class="absolute inset-0 overflow-hidden">
+            @for (int i = 0; i < featured.Count; i++)
+            {
+                var movie = featured[i];
+                var backdrop = string.IsNullOrEmpty(movie.Backdrop_Path)
+                    ? (string.IsNullOrEmpty(movie.Poster_Path) ? "" : $"https://image.tmdb.org/t/p/original{movie.Poster_Path}")
+                    : $"https://image.tmdb.org/t/p/original{movie.Backdrop_Path}";
+                var genres = movie.Genres?.Select(g => g.Name).Take(2).ToList() ?? new List<string?>();
 
-            <div class="carousel-slide absolute inset-0 transition-opacity duration-1000 @(i == 0 ? "opacity-100" : "opacity-0")" data-index="@i">
+                <div class="carousel-slide absolute inset-0 transition-opacity duration-1000 @(i == 0 ? "opacity-100" : "opacity-0")" data-index="@i">
 
-                <!-- Background -->
-                <div class="absolute inset-0 bg-cover bg-center scale-105" style="background-image: url('@backdrop')"></div>
+                    <div class="absolute inset-0 bg-cover bg-center scale-105" style="background-image: url('@backdrop')"></div>
 
-                <!-- Gradients -->
-                <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/60"></div>
-                <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-transparent to-transparent"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/60"></div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-transparent to-transparent"></div>
 
-                <!-- TOP: Search bar -->
-                <div class="absolute top-0 left-0 right-0 flex flex-col items-center pt-28 px-6 z-10">
-                    <div class="max-w-2xl w-full glass-panel rounded-full p-2 flex items-center gap-2 shadow-[0_8px_32px_0_rgba(0,0,0,0.5)]">
-                        <div class="flex items-center gap-2 pl-4">
-                            <span class="material-symbols-outlined text-white/40">search</span>
+                    <div class="absolute bottom-0 left-0 px-10 lg:px-20 pb-20 z-10 max-w-2xl">
+                        <div class="flex items-center gap-2 mb-3 flex-wrap">
+                            @foreach (var genre in genres)
+                            {
+                                <span class="text-[10px] uppercase tracking-widest text-white/50 border border-white/20 px-2 py-0.5 rounded-full">@genre</span>
+                            }
+
+                            @if (!string.IsNullOrEmpty(movie.Release_Date) && movie.Release_Date.Length >= 4)
+                            {
+                                <span class="text-[10px] uppercase tracking-widest text-white/40">@movie.Release_Date.Substring(0, 4)</span>
+                            }
                         </div>
-                        <input id="searchInput" type="text"
-                               placeholder="Search books, movies, genres, authors..."
-                               class="bg-transparent border-none focus:ring-0 text-white text-base w-full px-2 placeholder:text-white/30" />
-                        <div class="flex items-center gap-1 pr-2">
-                            <button class="filter-btn active" data-filter="all" type="button">All</button>
-                            <button class="filter-btn" data-filter="books" type="button">Books</button>
-                            <button class="filter-btn" data-filter="movies" type="button">Movies</button>
-                        </div>
-                    </div>
 
-                    <div id="searchResults" class="max-w-6xl w-full mx-auto mt-6 hidden text-left bg-black/60 backdrop-blur rounded-2xl p-6">
-                        <div id="booksSection" class="mb-8">
-                            <h2 class="text-white text-xl font-bold mb-4">Books</h2>
-                            <div id="booksGrid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
-                        </div>
-                        <div id="moviesSection">
-                            <h2 class="text-white text-xl font-bold mb-4">Movies</h2>
-                            <div id="moviesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                        <h1 class="text-5xl lg:text-7xl font-black font-headline text-white leading-none mb-4 drop-shadow-2xl">
+                            @movie.Title
+                        </h1>
+
+                        <p class="text-white/60 text-sm lg:text-base mb-6 line-clamp-2 max-w-lg">
+                            @movie.Overview
+                        </p>
+
+                        <div class="flex items-center gap-3 flex-wrap">
+                            <a href="/Movies/TmdbDetails/@movie.Id"
+                                   class="flex items-center gap-2 bg-white text-black font-bold px-8 py-3 rounded-xl hover:bg-white/90 transition text-sm uppercase tracking-widest">
+                                <span class="material-symbols-outlined text-base">info</span>
+                                More Info
+                            </a>
+
+                            <div class="flex items-center gap-1 bg-white/10 border border-white/10 px-4 py-3 rounded-xl text-white text-sm font-semibold">
+                                <span class="material-symbols-outlined text-yellow-400 text-base">star</span>
+                                @movie.Vote_Average.ToString("F1")
+                            </div>
                         </div>
                     </div>
                 </div>
+            }
+        </div>
 
-                <!-- BOTTOM: Movie info -->
-                <div class="absolute bottom-0 left-0 px-10 lg:px-20 pb-20 z-10 max-w-2xl">
-                    <div class="flex items-center gap-2 mb-3">
-                        @foreach (var genre in genres)
-                        {
-                            <span class="text-[10px] uppercase tracking-widest text-white/50 border border-white/20 px-2 py-0.5 rounded-full">@genre</span>
-                        }
-                        <span class="text-[10px] uppercase tracking-widest text-white/40">@movie.Release_Date?.Substring(0, 4)</span>
+        <!-- Search -->
+        <div class="absolute top-0 left-0 right-0 flex flex-col items-center pt-28 px-6 z-30">
+            <div class="max-w-2xl w-full relative">
+                <div class="glass-panel rounded-full p-2 flex items-center gap-2 shadow-[0_8px_32px_0_rgba(0,0,0,0.5)]">
+                    <div class="flex items-center gap-2 pl-4">
+                        <span class="material-symbols-outlined text-white/40">search</span>
                     </div>
 
-                    <h1 class="text-5xl lg:text-7xl font-black font-headline text-white leading-none mb-4 drop-shadow-2xl">
-                        @movie.Title
-                    </h1>
+                    <input id="searchInput"
+                           type="text"
+                           placeholder="Search books, movies, genres, authors..."
+                           class="bg-transparent border-none focus:ring-0 text-white text-base w-full px-2 placeholder:text-white/30 outline-none" />
 
-                    <p class="text-white/60 text-sm lg:text-base mb-6 line-clamp-2 max-w-lg">
-                        @movie.Overview
-                    </p>
+                    <div class="flex items-center gap-1 pr-2">
+                        <button class="filter-btn active" data-filter="all" type="button">All</button>
+                        <button class="filter-btn" data-filter="books" type="button">Books</button>
+                        <button class="filter-btn" data-filter="movies" type="button">Movies</button>
+                    </div>
+                </div>
 
-                    <div class="flex items-center gap-3">
-                        <a href="/Movies/TmdbDetails/@movie.Id"
-                               class="flex items-center gap-2 bg-white text-black font-bold px-8 py-3 rounded-xl hover:bg-white/90 transition text-sm uppercase tracking-widest">
-                            <span class="material-symbols-outlined text-base">info</span>
-                            More Info
-                        </a>
-                        <div class="flex items-center gap-1 bg-white/10 border border-white/10 px-4 py-3 rounded-xl text-white text-sm font-semibold">
-                            <span class="material-symbols-outlined text-yellow-400 text-base">star</span>
-                            @movie.Vote_Average.ToString("F1")
-                        </div>
+                <div id="searchResults"
+                     class="absolute top-full left-0 right-0 mt-4 hidden text-left bg-black/70 backdrop-blur-xl rounded-2xl p-6 border border-white/10 shadow-2xl max-h-[70vh] overflow-y-auto z-50">
+                    <div id="booksSection" class="mb-8">
+                        <h2 class="text-white text-xl font-bold mb-4">Books</h2>
+                        <div id="booksGrid" class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+                    </div>
+
+                    <div id="moviesSection">
+                        <h2 class="text-white text-xl font-bold mb-4">Movies</h2>
+                        <div id="moviesGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
                     </div>
                 </div>
             </div>
-        }
+        </div>
 
         <!-- Dots -->
         <div class="absolute bottom-8 right-10 lg:right-20 flex gap-2 z-20">
@@ -97,10 +108,13 @@
         </div>
 
         <!-- Arrows -->
-        <button onclick="prevSlide()" class="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-black/40 border border-white/10 flex items-center justify-center hover:bg-black/70 transition">
+        <button onclick="prevSlide()"
+                class="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-black/40 border border-white/10 flex items-center justify-center hover:bg-black/70 transition">
             <span class="material-symbols-outlined text-white">chevron_left</span>
         </button>
-        <button onclick="nextSlide()" class="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-black/40 border border-white/10 flex items-center justify-center hover:bg-black/70 transition">
+
+        <button onclick="nextSlide()"
+                class="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 rounded-full bg-black/40 border border-white/10 flex items-center justify-center hover:bg-black/70 transition">
             <span class="material-symbols-outlined text-white">chevron_right</span>
         </button>
     </div>
@@ -113,6 +127,8 @@
     let timer = setInterval(nextSlide, 10000);
 
     function goToSlide(index) {
+        if (!slides.length || !dots.length) return;
+
         slides[current].classList.remove('opacity-100');
         slides[current].classList.add('opacity-0');
         dots[current].classList.remove('bg-white', 'w-8');
@@ -130,12 +146,12 @@
     }
 
     function nextSlide() {
-
-
+        if (!slides.length) return;
         goToSlide((current + 1) % slides.length);
     }
 
     function prevSlide() {
+        if (!slides.length) return;
         goToSlide((current - 1 + slides.length) % slides.length);
     }
 </script>
